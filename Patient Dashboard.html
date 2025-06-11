@@ -25,28 +25,32 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
   </style>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">Muganga AI</a>
+      <a class="navbar-brand fw-bold" href="index.html">Muganga AI</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <a href="index.html" class="nav-link text-white">Home</a>
         <a href="#dashboard" class="nav-link text-white">Dashboard</a>
         <a href="#history" class="nav-link text-white">My History</a>
         <a href="#settings" class="nav-link text-white">Settings</a>
-        <a href="#logout" class="nav-link text-white">Logout</a>
+        <a href="#logout" class="nav-link text-white" onclick="logout()">Logout</a>
       </div>
     </div>
   </nav>
 
   <!-- Main Content -->
   <div class="container mt-5">
-    <h1>Murakaza neza, Jean Bosco!</h1>
+    <h1>Murakaza neza, <span id="userName">User</span>!</h1>
     <p>Ubu urimo kureba raporo yawe y'ubuzima.</p>
 
     <!-- Summary Cards -->
@@ -54,25 +58,25 @@
       <div class="col-md-3 mb-3">
         <div class="card text-center p-3">
           <h5>Heart Rate</h5>
-          <p class="display-6">72 bpm</p>
+          <p class="display-6" id="heartRate">-</p>
         </div>
       </div>
       <div class="col-md-3 mb-3">
         <div class="card text-center p-3">
           <h5>Ubushyuhe</h5>
-          <p class="display-6">36.5°C</p>
+          <p class="display-6" id="temperature">-</p>
         </div>
       </div>
       <div class="col-md-3 mb-3">
         <div class="card text-center p-3">
           <h5>Ibiro</h5>
-          <p class="display-6">70 kg</p>
+          <p class="display-6" id="weight">-</p>
         </div>
       </div>
       <div class="col-md-3 mb-3">
         <div class="card text-center p-3">
           <h5>Uburebure</h5>
-          <p class="display-6">175 cm</p>
+          <p class="display-6" id="height">-</p>
         </div>
       </div>
     </div>
@@ -94,44 +98,81 @@
           <th>Uburebure</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>2025-06-12</td>
-          <td>72 bpm</td>
-          <td>36.5°C</td>
-          <td>70 kg</td>
-          <td>175 cm</td>
-        </tr>
-        <tr>
-          <td>2025-05-15</td>
-          <td>75 bpm</td>
-          <td>36.7°C</td>
-          <td>69 kg</td>
-          <td>175 cm</td>
-        </tr>
+      <tbody id="historyTable">
       </tbody>
     </table>
-
-    <!-- Settings -->
-    <h3 id="settings">Account Settings</h3>
-    <form>
-      <div class="mb-3">
-        <label for="name" class="form-label">Amazina</label>
-        <input type="text" class="form-control" id="name" value="Jean Bosco">
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Imeyili</label>
-        <input type="email" class="form-control" id="email" value="jean@gmail.com">
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Ijambobanga rishya</label>
-        <input type="password" class="form-control" id="password" placeholder="Shyiramo ijambobanga rishya">
-      </div>
-      <button type="submit" class="btn btn-primary">Bika Impinduka</button>
-    </form>
-
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
+      authDomain: "muganga-ai.firebaseapp.com",
+      projectId: "muganga-ai",
+      storageBucket: "muganga-ai.firebasestorage.app",
+      messagingSenderId: "609789687173",
+      appId: "1:609789687173:web:04b6b1eeb20cc70062c0ec",
+      measurementId: "G-JSTCX5WQ31"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Read user profile
+        db.collection("users").doc(user.uid).get().then(doc => {
+          document.getElementById("userName").innerText = doc.data().name;
+        });
+
+        // Read latest health record
+        db.collection("healthRecords")
+          .where("userId", "==", user.uid)
+          .orderBy("recordedAt", "desc")
+          .limit(1)
+          .get()
+          .then(snapshot => {
+            if (!snapshot.empty) {
+              const data = snapshot.docs[0].data();
+              document.getElementById("heartRate").innerText = data.heartRate + " bpm";
+              document.getElementById("temperature").innerText = data.temperature + "°C";
+              document.getElementById("weight").innerText = data.weight + " kg";
+              document.getElementById("height").innerText = data.height + " cm";
+            }
+          });
+
+        // Load full history
+        db.collection("healthRecords")
+          .where("userId", "==", user.uid)
+          .orderBy("recordedAt", "desc")
+          .get()
+          .then(snapshot => {
+            const table = document.getElementById("historyTable");
+            snapshot.forEach(doc => {
+              const data = doc.data();
+              const row = `<tr>
+                <td>${data.recordedAt.toDate().toISOString().split('T')[0]}</td>
+                <td>${data.heartRate} bpm</td>
+                <td>${data.temperature}°C</td>
+                <td>${data.weight} kg</td>
+                <td>${data.height} cm</td>
+              </tr>`;
+              table.innerHTML += row;
+            });
+          });
+
+      } else {
+        window.location.href = "patient-auth.html"; // redirect if not logged in
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "patient-auth.html";
+      });
+    }
+  </script>
 </body>
 </html>
