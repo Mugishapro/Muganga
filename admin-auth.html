@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8">
+  <title>Muganga AI - Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; }
+    .container { max-width: 400px; margin-top: 80px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="text-center mb-4">Muganga AI - Admin Login</h2>
+    <input type="email" id="adminEmail" class="form-control mb-2" placeholder="Imeyili ya Admin">
+    <input type="password" id="adminPassword" class="form-control mb-2" placeholder="Ijambobanga">
+    <button class="btn btn-primary w-100" onclick="adminLogin()">Injira</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
+      authDomain: "muganga-ai.firebaseapp.com",
+      projectId: "muganga-ai",
+      storageBucket: "muganga-ai.firebasestorage.app",
+      messagingSenderId: "609789687173",
+      appId: "1:609789687173:web:04b6b1eeb20cc70062c0ec",
+      measurementId: "G-JSTCX5WQ31"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    function adminLogin() {
+      const email = document.getElementById("adminEmail").value;
+      const password = document.getElementById("adminPassword").value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          db.collection("users").doc(user.uid).get().then(doc => {
+            if (doc.exists && doc.data().role === "admin") {
+              window.location.href = "admin-dashboard.html";
+            } else {
+              alert("Nta burenganzira bwo kwinjira kuri Admin Panel.");
+              auth.signOut();
+            }
+          });
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
+  </script>
+
+</body>
+</html>
