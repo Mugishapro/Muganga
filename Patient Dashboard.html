@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+  <meta charset="UTF-8">
+  <title>Muganga AI - Patient Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+    .navbar {
+      background-color: #007bff;
+    }
+    .navbar a, .navbar-brand {
+      color: white !important;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Muganga AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <a href="#dashboard" class="nav-link text-white">Dashboard</a>
+        <a href="#history" class="nav-link text-white">My History</a>
+        <a href="#settings" class="nav-link text-white">Settings</a>
+        <a href="#logout" class="nav-link text-white">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-5">
+    <h1>Murakaza neza, Jean Bosco!</h1>
+    <p>Ubu urimo kureba raporo yawe y'ubuzima.</p>
+
+    <!-- Summary Cards -->
+    <div class="row my-4">
+      <div class="col-md-3 mb-3">
+        <div class="card text-center p-3">
+          <h5>Heart Rate</h5>
+          <p class="display-6">72 bpm</p>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card text-center p-3">
+          <h5>Ubushyuhe</h5>
+          <p class="display-6">36.5°C</p>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card text-center p-3">
+          <h5>Ibiro</h5>
+          <p class="display-6">70 kg</p>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card text-center p-3">
+          <h5>Uburebure</h5>
+          <p class="display-6">175 cm</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="alert alert-success" role="alert">
+      Ibipimo byawe bimeze neza. Komereza aho kwita ku buzima bwawe!
+    </div>
+
+    <!-- History Table -->
+    <h3 id="history">My Health History</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Itariki</th>
+          <th>Heart Rate</th>
+          <th>Ubushyuhe</th>
+          <th>Ibiro</th>
+          <th>Uburebure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025-06-12</td>
+          <td>72 bpm</td>
+          <td>36.5°C</td>
+          <td>70 kg</td>
+          <td>175 cm</td>
+        </tr>
+        <tr>
+          <td>2025-05-15</td>
+          <td>75 bpm</td>
+          <td>36.7°C</td>
+          <td>69 kg</td>
+          <td>175 cm</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Settings -->
+    <h3 id="settings">Account Settings</h3>
+    <form>
+      <div class="mb-3">
+        <label for="name" class="form-label">Amazina</label>
+        <input type="text" class="form-control" id="name" value="Jean Bosco">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Imeyili</label>
+        <input type="email" class="form-control" id="email" value="jean@gmail.com">
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Ijambobanga rishya</label>
+        <input type="password" class="form-control" id="password" placeholder="Shyiramo ijambobanga rishya">
+      </div>
+      <button type="submit" class="btn btn-primary">Bika Impinduka</button>
+    </form>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
