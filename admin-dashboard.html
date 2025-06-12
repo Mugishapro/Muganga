@@ -2,136 +2,148 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Muganga AI Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Muganga AI Admin Dashboard</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
+      margin: 0; padding: 0;
+      display: flex; flex-direction: column;
+      min-height: 100vh;
     }
     .topnav {
-      background-color: #007bff;
+      background: #007bff;
       color: white;
-      padding: 1rem 3rem;
-      font-size: 1.5rem;
+      padding: 1rem 2rem;
       position: relative;
+      font-size: 1.5rem;
       text-align: center;
     }
-    .topnav-title {
-      margin-left: 2.5rem;
+    .hamburger {
+      position: absolute;
+      left: 1rem; top: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: white;
+      cursor: pointer;
+      display: none;
+      z-index: 1100;
     }
     .container {
-      display: flex;
       flex: 1;
+      display: flex;
+      min-height: 0; /* for flex container */
     }
     .sidenav {
-      background-color: #f4f4f4;
+      width: 220px;
+      background: #f4f4f4;
       padding: 1rem;
-      width: 200px;
-      min-height: 100vh;
-      transition: transform 0.3s ease-in-out;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      transition: transform 0.3s ease;
     }
     .sidenav a {
       display: block;
-      margin: 0.2rem 0;
-      padding: 0.4rem 0.6rem;
-      text-decoration: none;
+      margin: 0.3rem 0;
+      padding: 0.5rem 0.7rem;
       color: #333;
+      text-decoration: none;
       border-radius: 5px;
-      transition: background 0.3s;
+      transition: background-color 0.3s;
+      user-select: none;
     }
     .sidenav a:hover {
-      background-color: #ddd;
+      background: #ddd;
+    }
+    .sidenav.active {
+      transform: translateX(0);
+    }
+    .sidenav.hidden {
+      transform: translateX(-100%);
     }
     .main {
       flex: 1;
-      padding: 1rem;
-    }
-    .hamburger {
-      display: none;
-      font-size: 1.5rem;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      position: absolute;
-      left: 1rem;
-      top: 1rem;
-      z-index: 1100;
-    }
-    @media (max-width: 768px) {
-      .sidenav {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100%;
-        transform: translateX(-100%);
-        z-index: 1000;
-        width: 200px;
-      }
-      .sidenav.active {
-        transform: translateX(0);
-      }
-      .hamburger {
-        display: block;
-      }
+      padding: 1rem 1.5rem;
+      overflow-y: auto;
     }
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 1rem;
     }
     th, td {
-      padding: 10px;
       border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: left;
     }
     button {
-      padding: 5px 10px;
+      padding: 0.3rem 0.6rem;
       cursor: pointer;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      .sidenav {
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%;
+        background: #f4f4f4;
+        z-index: 1000;
+        transform: translateX(-100%);
+        width: 220px;
+      }
+      .sidenav.active {
+        transform: translateX(0);
+        box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+      }
+      .main {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="topnav">
-    <button class="hamburger" onclick="toggleSidebar()">☰</button>
-    <span class="topnav-title">Muganga AI Admin Dashboard</span>
+    <button class="hamburger" aria-label="Toggle navigation" id="hamburgerBtn">☰</button>
+    Muganga AI Admin Dashboard
   </div>
 
   <div class="container">
-    <div class="sidenav" id="sidenav">
-      <a href="#" onclick="switchSection(loadOverview)">🏠 Dashboard</a>
-      <a href="#" onclick="switchSection(loadUsers)">👥 Users</a>
-      <a href="#" onclick="switchSection(loadAdmins)">🛠️ Admins</a>
-      <a href="#" onclick="switchSection(loadRecords)">📋 Records</a>
-      <a href="#" onclick="switchSection(loadCritical)">🚨 Critical</a>
-      <a href="#" onclick="switchSection(loadComments)">💬 Comments</a>
-      <a href="#" onclick="logout()">🚪 Logout</a>
-    </div>
-    <div class="main" id="main">
+    <nav class="sidenav hidden" id="sidebar">
+      <a href="#" data-section="overview">🏠 Dashboard</a>
+      <a href="#" data-section="users">👥 Users</a>
+      <a href="#" data-section="admins">🛠️ Admins</a>
+      <a href="#" data-section="records">📋 Records</a>
+      <a href="#" data-section="critical">🚨 Critical</a>
+      <a href="#" data-section="comments">💬 Comments</a>
+      <a href="#" id="logoutBtn">🚪 Logout</a>
+    </nav>
+
+    <main class="main" id="mainContent">
       <h2>Loading...</h2>
-    </div>
+    </main>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
-      getFirestore,
-      collection,
-      getDocs,
-      doc,
-      getDoc,
-      updateDoc
+      getFirestore, collection, getDocs, doc, getDoc, updateDoc
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
     import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
+      getAuth, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+    // Your Firebase config here
     const firebaseConfig = {
       apiKey: "AIzaSyDXFeOehYhT-bU4AVz6EvINJxNRhKibVvI",
       authDomain: "muganga-ai.firebaseapp.com",
@@ -146,143 +158,183 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        alert("You must be logged in.");
-        window.location.href = "/admin-login";
-        return;
-      }
+    const main = document.getElementById("mainContent");
+    const sidebar = document.getElementById("sidebar");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (!userDoc.exists() || userDoc.data().role !== "admin") {
-        alert("Access denied.");
-        window.location.href = "/admin-login";
-        return;
-      }
-
-      loadOverview();
+    // Toggle sidebar on small screens
+    hamburgerBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      sidebar.classList.toggle("hidden");
     });
 
-    window.loadOverview = function () {
-      document.getElementById("main").innerHTML = "<h2>Dashboard Overview</h2><p>Summary of statistics here...</p>";
-    };
+    // Logout handler
+    logoutBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      try {
+        await signOut(auth);
+        window.location.href = "/admin-login";
+      } catch (error) {
+        alert("Logout failed: " + error.message);
+      }
+    });
 
-    window.loadUsers = async function () {
-      const main = document.getElementById("main");
+    // Authentication & role check
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/admin-login";
+        return;
+      }
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (!userDoc.exists() || userDoc.data().role !== "admin") {
+          window.location.href = "/admin-login";
+          return;
+        }
+        loadSection("overview");
+      } catch (error) {
+        console.error("Error checking admin role:", error);
+        window.location.href = "/admin-login";
+      }
+    });
+
+    // Section loading functions
+    async function loadSection(section) {
+      // Close sidebar on mobile after click
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add("hidden");
+        sidebar.classList.remove("active");
+      }
+      switch (section) {
+        case "overview":
+          loadOverview();
+          break;
+        case "users":
+          await loadUsers();
+          break;
+        case "admins":
+          await loadAdmins();
+          break;
+        case "records":
+          loadRecords();
+          break;
+        case "critical":
+          loadCritical();
+          break;
+        case "comments":
+          await loadComments();
+          break;
+        default:
+          main.innerHTML = "<p>Section not found.</p>";
+      }
+    }
+
+    // Sidebar navigation clicks
+    sidebar.querySelectorAll("a[data-section]").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const section = link.getAttribute("data-section");
+        loadSection(section);
+      });
+    });
+
+    // Section implementations
+
+    function loadOverview() {
+      main.innerHTML = `
+        <h2>Dashboard Overview</h2>
+        <p>Welcome to the Muganga AI admin dashboard.</p>
+        <p>Use the sidebar to navigate through the sections.</p>
+      `;
+    }
+
+    async function loadUsers() {
       main.innerHTML = "<h2>Users</h2><p>Loading users...</p>";
-
       try {
         const snapshot = await getDocs(collection(db, "users"));
         if (snapshot.empty) {
           main.innerHTML = "<h2>Users</h2><p>No users found.</p>";
           return;
         }
-
-        let html = "<h2>Users</h2><table><tr><th>Name</th><th>Email</th><th>Role</th></tr>";
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          html += `<tr><td>${data.name || "Unknown"}</td><td>${data.email || "N/A"}</td><td>${data.role || "user"}</td></tr>`;
+        let html = `<h2>Users</h2>
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th></tr></thead>
+            <tbody>`;
+        snapshot.forEach(docSnap => {
+          const user = docSnap.data();
+          html += `<tr>
+            <td>${user.name || "Unknown"}</td>
+            <td>${user.email || "N/A"}</td>
+            <td>${user.role || "user"}</td>
+          </tr>`;
         });
-        html += "</table>";
+        html += "</tbody></table>";
         main.innerHTML = html;
-
       } catch (error) {
         main.innerHTML = `<h2>Users</h2><p>Error loading users: ${error.message}</p>`;
       }
-    };
+    }
 
-    window.loadAdmins = async function () {
-      const main = document.getElementById("main");
-      main.innerHTML = "<h2>Admins</h2><p>Loading admin accounts...</p>";
-
+    async function loadAdmins() {
+      main.innerHTML = "<h2>Admins</h2><p>Loading admins...</p>";
       try {
         const snapshot = await getDocs(collection(db, "users"));
-        let html = "<h2>Admins</h2><table><tr><th>Name</th><th>Email</th><th>Actions</th></tr>";
-
+        let html = `<h2>Admins</h2>
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Actions</th></tr></thead>
+            <tbody>`;
+        let found = false;
         snapshot.forEach(docSnap => {
-          const data = docSnap.data();
-          if (data.role === "admin") {
-            html += `<tr>
-                <td>${data.name || "Unknown"}</td>
-                <td>${data.email || "N/A"}</td>
-                <td><button onclick="removeAdmin('${docSnap.id}')">Remove Admin</button></td>
-              </tr>`;
+          const user = docSnap.data();
+          if (user.role === "admin") {
+            found = true;
+            html += `<tr data-uid="${docSnap.id}">
+              <td>${user.name || "Unknown"}</td>
+              <td>${user.email || "N/A"}</td>
+              <td><button class="remove-admin-btn">Remove Admin</button></td>
+            </tr>`;
           }
         });
-
-        html += "</table>";
-        main.innerHTML = html;
-
-      } catch (error) {
-        main.innerHTML = `<h2>Admins</h2><p>Error: ${error.message}</p>`;
-      }
-    };
-
-    window.removeAdmin = async function (userId) {
-      if (!confirm("Are you sure you want to remove admin rights?")) return;
-
-      try {
-        await updateDoc(doc(db, "users", userId), { role: "user" });
-        alert("Admin rights removed.");
-        loadAdmins();
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
-    };
-
-    window.loadRecords = function () {
-      document.getElementById("main").innerHTML = "<h2>Records</h2><p>Patient records will appear here...</p>";
-    };
-
-    window.loadCritical = function () {
-      document.getElementById("main").innerHTML = "<h2>Critical</h2><p>Critical health alerts...</p>";
-    };
-
-    window.loadComments = async function () {
-      const main = document.getElementById("main");
-      main.innerHTML = "<h2>Comments</h2><p>Loading comments...</p>";
-
-      try {
-        const snapshot = await getDocs(collection(db, "comments"));
-        if (snapshot.empty) {
-          main.innerHTML = "<h2>Comments</h2><p>No comments found.</p>";
+        if (!found) {
+          main.innerHTML = "<h2>Admins</h2><p>No admins found.</p>";
           return;
         }
-
-        let html = "<h2>Comments</h2><table><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>";
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const ts = data.timestamp ? new Date(data.timestamp.seconds * 1000) : null;
-          const date = ts ? `${ts.toLocaleDateString()} ${ts.toLocaleTimeString()}` : "N/A";
-          html += `<tr><td>${data.user || "Anonymous"}</td><td>${data.text || ""}</td><td>${date}</td></tr>`;
-        });
-        html += "</table>";
+        html += "</tbody></table>";
         main.innerHTML = html;
 
-      } catch (error) {
-        main.innerHTML = `<h2>Comments</h2><p>Error: ${error.message}</p>`;
-      }
-    };
-
-    window.logout = function () {
-      signOut(auth)
-        .then(() => {
-          alert("Logged out.");
-          window.location.href = "/admin-login";
-        })
-        .catch(error => {
-          alert("Logout failed: " + error.message);
+        // Add button event listeners to remove admin role
+        document.querySelectorAll(".remove-admin-btn").forEach(button => {
+          button.addEventListener("click", async (e) => {
+            const tr = e.target.closest("tr");
+            const uid = tr.getAttribute("data-uid");
+            if (!confirm("Are you sure you want to remove admin role?")) return;
+            try {
+              await updateDoc(doc(db, "users", uid), { role: "user" });
+              alert("Admin role removed.");
+              loadAdmins();
+            } catch (error) {
+              alert("Failed to remove admin: " + error.message);
+            }
+          });
         });
-    };
 
-    window.toggleSidebar = function () {
-      document.getElementById("sidenav").classList.toggle("active");
-    };
+      } catch (error) {
+        main.innerHTML = `<h2>Admins</h2><p>Error loading admins: ${error.message}</p>`;
+      }
+    }
 
-    window.switchSection = function (loadFunction) {
-      document.getElementById("sidenav").classList.remove("active");
-      loadFunction();
-    };
+    // Placeholder for other sections:
+    function loadRecords() {
+      main.innerHTML = `<h2>Records</h2><p>Coming soon...</p>`;
+    }
+    function loadCritical() {
+      main.innerHTML = `<h2>Critical</h2><p>Coming soon...</p>`;
+    }
+    async function loadComments() {
+      main.innerHTML = `<h2>Comments</h2><p>Coming soon...</p>`;
+    }
+
   </script>
 </body>
 </html>
