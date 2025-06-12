@@ -14,8 +14,7 @@
 
   <div class="container">
     <h2 class="text-center mb-4">Muganga AI - Patient Access</h2>
-    
-    <!-- Register Form -->
+
     <div id="registerDiv">
       <h4>Iyandikishe</h4>
       <input type="text" id="regName" class="form-control mb-2" placeholder="Amazina">
@@ -25,7 +24,6 @@
       <p class="mt-2">Ufite konti? <a href="#" onclick="toggleForm('login')">Injira hano</a></p>
     </div>
 
-    <!-- Login Form -->
     <div id="loginDiv" style="display:none;">
       <h4>Injira</h4>
       <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Imeyili">
@@ -35,7 +33,6 @@
     </div>
   </div>
 
-  <!-- Firebase SDK using Modular v9 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -45,7 +42,7 @@
       apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
       authDomain: "muganga-ai.firebaseapp.com",
       projectId: "muganga-ai",
-      storageBucket: "muganga-ai.firebasestorage.app",
+      storageBucket: "muganga-ai.appspot.com",
       messagingSenderId: "609789687173",
       appId: "1:609789687173:web:04b6b1eeb20cc70062c0ec",
       measurementId: "G-JSTCX5WQ31"
