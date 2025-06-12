@@ -10,6 +10,67 @@
     .container { max-width: 400px; margin-top: 50px; }
     .form-control { font-size: 16px; }
     .btn { font-size: 18px; padding: 10px; }
+    
+    /* Chatbot Styles */
+    #chatbot {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    #chatbot-header {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    #chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    #chat-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+    }
+
+    #chat-input button {
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+    }
+
+    #chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #007bff;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      font-size: 24px;
+    }
   </style>
 </head>
 <body>
@@ -43,7 +104,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
       authDomain: "muganga-ai.firebaseapp.com",
@@ -54,7 +114,6 @@
       measurementId: "G-JSTCX5WQ31"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
@@ -105,6 +164,60 @@
       } catch (error) {
         alert(error.message);
       }
+    }
+  </script>
+
+  <!-- Chatbot HTML -->
+  <div id="chatbot">
+    <div id="chatbot-header">Muganga AI 🤖</div>
+    <div id="chat-messages"></div>
+    <div id="chat-input">
+      <input type="text" id="chatText" placeholder="Andika ikibazo...">
+      <button onclick="sendChat()">➡️</button>
+    </div>
+  </div>
+
+  <button id="chat-toggle" onclick="toggleChat()">💬</button>
+
+  <!-- Chatbot Logic -->
+  <script>
+    function toggleChat() {
+      const chat = document.getElementById('chatbot');
+      chat.style.display = (chat.style.display === 'none' || chat.style.display === '') ? 'flex' : 'none';
+    }
+
+    document.getElementById('chatText').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') sendChat();
+    });
+
+    function sendChat() {
+      const input = document.getElementById('chatText');
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("Wowe", message);
+      input.value = '';
+
+      setTimeout(() => {
+        const lower = message.toLowerCase();
+        if (lower.includes("kwiyandikisha")) {
+          appendMessage("Muganga AI", "Kanda ahanditse 'Iyandikishe' hasi hanyuma wuzuze amazina, imeyili n’ijambobanga.");
+        } else if (lower.includes("kwinjira")) {
+          appendMessage("Muganga AI", "Shyiramo imeyili na password yawe hanyuma ukande 'Injira'.");
+        } else if (lower.includes("ikibazo") || lower.includes("ntibikora")) {
+          appendMessage("Muganga AI", "Gerageza kongera winjire neza cyangwa wandikire admin.");
+        } else {
+          appendMessage("Muganga AI", "Admin araza kugusubiza mu kanya katarambiranye.");
+        }
+      }, 500);
+    }
+
+    function appendMessage(sender, text) {
+      const messages = document.getElementById('chat-messages');
+      const msg = document.createElement('div');
+      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
     }
   </script>
 
