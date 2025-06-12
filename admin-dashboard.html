@@ -17,10 +17,14 @@
         .topnav {
             background-color: #007BFF;
             color: white;
-            padding: 1rem;
-            text-align: center;
+            padding: 1rem 3rem 1rem 3rem;
             font-size: 1.5rem;
             position: relative;
+            text-align: center;
+        }
+
+        .topnav-title {
+            margin-left: 2.5rem;
         }
 
         .container {
@@ -39,8 +43,8 @@
 
         .sidenav a {
             display: block;
-            margin: 0.3rem 0;
-            padding: 0.5rem;
+            margin: 0.2rem 0;
+            padding: 0.4rem 0.6rem;
             text-decoration: none;
             color: #333;
             border-radius: 5px;
@@ -96,7 +100,7 @@
 <body>
     <div class="topnav">
         <button class="hamburger" onclick="toggleSidebar()">☰</button>
-        Muganga AI Admin Dashboard
+        <span class="topnav-title">Muganga AI Admin Dashboard</span>
     </div>
     <div class="container">
         <div class="sidenav" id="sidenav">
@@ -139,8 +143,34 @@
             document.getElementById("main").innerHTML = "<h2>Dashboard Overview</h2><p>Summary of statistics here...</p>";
         }
 
-        window.loadUsers = function () {
-            document.getElementById("main").innerHTML = "<h2>Users</h2><p>Manage users...</p>";
+        window.loadUsers = async function () {
+            const main = document.getElementById("main");
+            main.innerHTML = "<h2>Users</h2><p>Loading users...</p>";
+
+            try {
+                const usersRef = collection(db, "users");
+                const snapshot = await getDocs(usersRef);
+
+                if (snapshot.empty) {
+                    main.innerHTML = "<h2>Users</h2><p>No users found.</p>";
+                    return;
+                }
+
+                let html = `<h2>Users</h2><table border='1' cellpadding='10'><tr><th>Name</th><th>Email</th><th>Role</th></tr>`;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    html += `<tr>
+                                <td>${data.name || "Unknown"}</td>
+                                <td>${data.email || "N/A"}</td>
+                                <td>${data.role || "User"}</td>
+                             </tr>`;
+                });
+                html += `</table>`;
+                main.innerHTML = html;
+
+            } catch (error) {
+                main.innerHTML = `<h2>Users</h2><p>Error loading users: ${error.message}</p>`;
+            }
         }
 
         window.loadAdmins = function () {
