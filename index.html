@@ -11,16 +11,17 @@
     .header {
       background: linear-gradient(to right, #00c6ff, #0072ff);
       color: white;
-      padding: 100px 0;
+      padding: 80px 20px;
       text-align: center;
     }
-    .section { padding: 60px 0; }
+    .section { padding: 60px 15px; }
     .service-card {
       background: white;
       border-radius: 12px;
       padding: 30px;
       box-shadow: 0 6px 15px rgba(0,0,0,0.08);
       transition: 0.3s;
+      height: 100%;
     }
     .service-card:hover {
       transform: translateY(-10px);
@@ -49,10 +50,10 @@
   <div class="header">
     <div class="container">
       <h1 class="display-4 mb-3">Murakaza neza kuri <strong>Muganga AI</strong></h1>
-      <p class="lead">Ikoranabuhanga rishingiye kuri Artificial Intelligence mu gufasha abaganga n'abaforomo gucunga ubuzima bw'abaturage mu buryo bwizewe, bwihuse kandi bunoze.</p>
-      <div class="mt-4">
-        <a href="patient-auth.html" class="btn btn-success btn-lg mx-2">👤 Injira nk'Umurwayi</a>
-        <a href="admin-login.html" class="btn btn-light btn-lg mx-2">🧑‍⚕️ Injira nk'Umuyobozi</a>
+      <p class="lead">Ikoranabuhanga rishingiye kuri AI mu gufasha abaganga gucunga ubuzima bw'abaturage.</p>
+      <div class="mt-4 d-grid gap-3 d-md-flex justify-content-center">
+        <a href="patient-auth.html" class="btn btn-success btn-lg px-4">👤 Injira nk'Umurwayi</a>
+        <a href="admin-login.html" class="btn btn-light btn-lg px-4">🧑‍⚕️ Injira nk'Umuyobozi</a>
       </div>
     </div>
   </div>
@@ -61,18 +62,18 @@
   <div class="container section">
     <h2 class="text-center mb-5">🧬 Ibyerekeye Muganga AI</h2>
     <div class="row align-items-center">
-      <div class="col-md-6">
+      <div class="col-md-6 mb-4 mb-md-0">
         <p>
-          Muganga AI ni platform ifasha mu gukusanya, kubika no gusesengura amakuru y’ubuzima bw’abantu. Ikoresha Artificial Intelligence kugira ngo igaragaze amakuru y’ingenzi afasha mu gufata ibyemezo by’ubuvuzi bwihuse kandi bufite ishingiro.
+          Muganga AI ni platform ifasha mu gukusanya, kubika no gusesengura amakuru y’ubuzima bw’abantu hifashishijwe AI.
         </p>
         <ul>
-          <li>✔️ Gufasha mu gutahura hakiri kare indwara zikomeye.</li>
-          <li>✔️ Kugabanya amakosa y’ubuvuzi binyuze mu isesengura ry’amakuru.</li>
+          <li>✔️ Gutahura indwara hakiri kare.</li>
+          <li>✔️ Kugabanya amakosa y’ubuvuzi.</li>
           <li>✔️ Gutanga raporo zihuse z’ubuzima bw’umurwayi.</li>
         </ul>
       </div>
       <div class="col-md-6 text-center">
-        <img src="https://cdn-icons-png.flaticon.com/512/8097/8097763.png" alt="Muganga AI" class="img-fluid" width="320">
+        <img src="https://cdn-icons-png.flaticon.com/512/8097/8097763.png" alt="Muganga AI" class="img-fluid" width="300">
       </div>
     </div>
   </div>
@@ -80,26 +81,26 @@
   <!-- Services Section -->
   <div class="container section">
     <h2 class="text-center mb-5">💡 Serivisi Dutanga</h2>
-    <div class="row text-center">
+    <div class="row g-4">
       <div class="col-md-4">
-        <div class="service-card">
+        <div class="service-card text-center">
           <i class="fas fa-notes-medical icon-lg"></i>
           <h4>Kubika Ibipimo</h4>
-          <p>Tubika amakuru nk’umutima, ubushyuhe, umuvuduko w’amaraso, ibiro n’ibindi bifasha mu gukurikirana ubuzima.</p>
+          <p>Tubika ibipimo byose by’ubuzima bifasha abaganga gufata ibyemezo.</p>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="service-card">
+        <div class="service-card text-center">
           <i class="fas fa-microscope icon-lg text-success"></i>
           <h4>Isesengura ry’Amakuru</h4>
-          <p>System yacu isesengura amakuru kugira ngo hagaragare abakeneweho ubufasha bwihuse n’abari mu byago.</p>
+          <p>AI yacu isesengura amakuru, igatanga ibyemezo byihuse by’ubuvuzi.</p>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="service-card">
+        <div class="service-card text-center">
           <i class="fas fa-chart-line icon-lg text-danger"></i>
           <h4>Raporo Zihuse</h4>
-          <p>Abaganga babona raporo zihuse kandi zishingiye ku byavuye mu bipimo byose by’umurwayi.</p>
+          <p>Abaganga babona raporo z’ubuzima ku gihe kandi zihamye.</p>
         </div>
       </div>
     </div>
@@ -108,7 +109,7 @@
   <!-- Testimonials -->
   <div class="container section">
     <h2 class="text-center mb-5">🗣️ Ibitekerezo by'Abakoresha</h2>
-    <div class="row text-center">
+    <div class="row text-center g-4">
       <div class="col-md-4">
         <div class="service-card">
           <p>"Muganga AI yadufashije kumenya abarwayi bafite ibyago kare cyane!"</p>
@@ -132,13 +133,13 @@
 
   <!-- Trust Badge -->
   <div class="container text-center section">
-    <h5 class="text-success">🔒 Amakuru yawe abitswe mu mutekano wizewe, dukoresha encryption & secure servers.</h5>
+    <h5 class="text-success">🔒 Amakuru yawe arinzwe neza hifashishijwe encryption & secure servers.</h5>
   </div>
 
   <!-- Contact -->
   <div class="container section">
     <h2 class="text-center mb-4">📞 Twandikire</h2>
-    <p class="text-center">Ufite ikibazo cyangwa ushaka ibindi bisobanuro kuri Muganga AI? Twandikire cyangwa utuvugishe.</p>
+    <p class="text-center">Ufite ikibazo cyangwa ushaka ibisobanuro? Twandikire cyangwa utuvugishe.</p>
     <div class="row justify-content-center">
       <div class="col-md-6">
         <ul class="list-group">
