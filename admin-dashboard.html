@@ -1,242 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muganga AI Admin</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .topnav {
-            background-color: #007BFF;
-            color: white;
-            padding: 1rem 3rem;
-            font-size: 1.5rem;
-            position: relative;
-            text-align: center;
-        }
-
-        .topnav-title {
-            margin-left: 2.5rem;
-        }
-
-        .container {
-            display: flex;
-            flex: 1;
-        }
-
-        .sidenav {
-            background-color: #f4f4f4;
-            padding: 0.5rem 1rem;
-            width: 200px;
-            min-height: 100vh;
-            transition: transform 0.3s ease-in-out;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidenav a {
-            display: block;
-            margin: 0.2rem 0;
-            padding: 0.4rem 0.6rem;
-            text-decoration: none;
-            color: #333;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .sidenav a:hover {
-            background-color: #ddd;
-        }
-
-        .main {
-            flex: 1;
-            padding: 1rem;
-        }
-
-        .hamburger {
-            display: none;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            position: absolute;
-            left: 1rem;
-            top: 1rem;
-            z-index: 1100;
-        }
-
-        @media (max-width: 768px) {
-            .sidenav {
-                position: fixed;
-                left: 0;
-                top: 0;
-                height: 100%;
-                transform: translateX(-100%);
-                z-index: 1000;
-                width: 200px;
-                padding: 1rem;
-                background-color: #f4f4f4;
-            }
-
-            .sidenav.active {
-                transform: translateX(0);
-            }
-
-            .hamburger {
-                display: block;
-            }
-
-            .main {
-                padding: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Muganga AI Admin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topnav {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem 3rem;
+      font-size: 1.5rem;
+      position: relative;
+      text-align: center;
+    }
+    .topnav-title {
+      margin-left: 2.5rem;
+    }
+    .container {
+      display: flex;
+      flex: 1;
+    }
+    .sidenav {
+      background-color: #f4f4f4;
+      padding: 0.5rem 1rem;
+      width: 200px;
+      min-height: 100vh;
+      transition: transform 0.3s ease-in-out;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .sidenav a {
+      display: block;
+      margin: 0.2rem 0;
+      padding: 0.4rem 0.6rem;
+      text-decoration: none;
+      color: #333;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .sidenav a:hover {
+      background-color: #ddd;
+    }
+    .main {
+      flex: 1;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      z-index: 1100;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    @media (max-width: 768px) {
+      .sidenav {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        z-index: 1000;
+        width: 200px;
+        padding: 1rem;
+        background-color: #f4f4f4;
+      }
+      .sidenav.active {
+        transform: translateX(0);
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div class="topnav">
-        <button class="hamburger" onclick="toggleSidebar()">☰</button>
-        <span class="topnav-title">Muganga AI Admin Dashboard</span>
+  <div class="topnav">
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <span class="topnav-title">Muganga AI Admin Dashboard</span>
+  </div>
+  <div class="container">
+    <div class="sidenav" id="sidenav">
+      <a href="#" onclick="switchSection(loadOverview)">🏠 Dashboard</a>
+      <a href="#" onclick="switchSection(loadUsers)">👥 Users</a>
+      <a href="#" onclick="switchSection(loadAdmins)">🛠️ Admins</a>
+      <a href="#" onclick="switchSection(loadRecords)">📋 Records</a>
+      <a href="#" onclick="switchSection(loadCritical)">🚨 Critical</a>
+      <a href="#" onclick="switchSection(loadComments)">💬 Comments</a>
+      <a href="#" onclick="logout()">🚪 Logout</a>
     </div>
-    <div class="container">
-        <div class="sidenav" id="sidenav">
-            <a href="#" onclick="switchSection(loadOverview)">🏠 Dashboard</a>
-            <a href="#" onclick="switchSection(loadUsers)">👥 Users</a>
-            <a href="#" onclick="switchSection(loadAdmins)">🛠️ Admins</a>
-            <a href="#" onclick="switchSection(loadRecords)">📋 Records</a>
-            <a href="#" onclick="switchSection(loadCritical)">🚨 Critical</a>
-            <a href="#" onclick="switchSection(loadComments)">💬 Comments</a>
-            <a href="#" onclick="logout()">🚪 Logout</a>
-        </div>
-        <div class="main" id="main">
-            <h2>Welcome to Muganga AI Admin Panel</h2>
-            <p>Select a menu item to begin.</p>
-        </div>
+    <div class="main" id="main">
+      <h2>Welcome to Muganga AI Admin Panel</h2>
+      <p>Select a menu item to begin.</p>
     </div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDXFeOehYhT-bU4AVz6EvINJxNRhKibVvI",
-            authDomain: "muganga-ai.firebaseapp.com",
-            projectId: "muganga-ai",
-            storageBucket: "muganga-ai.appspot.com",
-            messagingSenderId: "724469912167",
-            appId: "1:724469912167:web:3fd118eeb5421c9b28d9b4",
-            measurementId: "G-05KYQ9S7QZ"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXFeOehYhT-bU4AVz6EvINJxNRhKibVvI",
+      authDomain: "muganga-ai.firebaseapp.com",
+      projectId: "muganga-ai",
+      storageBucket: "muganga-ai.appspot.com",
+      messagingSenderId: "724469912167",
+      appId: "1:724469912167:web:3fd118eeb5421c9b28d9b4",
+      measurementId: "G-05KYQ9S7QZ"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        window.loadOverview = function () {
-            document.getElementById("main").innerHTML = `
-                <h2>Dashboard Overview</h2>
-                <p>Summary of statistics here...</p>`;
+    window.loadOverview = function () {
+      document.getElementById("main").innerHTML = "<h2>Dashboard Overview</h2><p>Summary of statistics here...</p>";
+    }
+
+    window.loadUsers = async function () {
+      const main = document.getElementById("main");
+      main.innerHTML = "<h2>Users</h2><p>Loading users...</p>";
+
+      try {
+        const usersRef = collection(db, "users");
+        const snapshot = await getDocs(usersRef);
+
+        if (snapshot.empty) {
+          main.innerHTML = "<h2>Users</h2><p>No users found.</p>";
+          return;
         }
 
-        window.loadUsers = async function () {
-            const main = document.getElementById("main");
-            main.innerHTML = "<h2>Users</h2><p>Loading users...</p>";
+        let html = "<h2>Users</h2><table><tr><th>Name</th><th>Email</th><th>Role</th></tr>";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          html += `<tr>
+                      <td>${data.name || "Unknown"}</td>
+                      <td>${data.email || "N/A"}</td>
+                      <td>${data.role || "User"}</td>
+                   </tr>`;
+        });
+        html += "</table>";
+        main.innerHTML = html;
+      } catch (error) {
+        main.innerHTML = `<h2>Users</h2><p>Error: ${error.message}</p>`;
+      }
+    }
 
-            try {
-                const usersRef = collection(db, "users");
-                const snapshot = await getDocs(usersRef);
+    window.loadAdmins = function () {
+      document.getElementById("main").innerHTML = "<h2>Admins</h2><p>Manage admin accounts...</p>";
+    }
 
-                if (snapshot.empty) {
-                    main.innerHTML = "<h2>Users</h2><p>No users found.</p>";
-                    return;
-                }
+    window.loadRecords = async function () {
+      const main = document.getElementById("main");
+      main.innerHTML = "<h2>Health Records</h2><p>Loading records...</p>";
 
-                let html = "<h2>Users</h2><table border='1' cellpadding='10'><tr><th>Name</th><th>Email</th><th>Role</th></tr>";
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    html += `<tr>
-                        <td>${data.name || "Unknown"}</td>
-                        <td>${data.email || "N/A"}</td>
-                        <td>${data.role || "User"}</td>
-                    </tr>`;
-                });
-                html += "</table>";
-                main.innerHTML = html;
+      try {
+        const recordsRef = collection(db, "healthRecords");
+        const snapshot = await getDocs(recordsRef);
 
-            } catch (error) {
-                main.innerHTML = `<h2>Users</h2><p>Error loading users: ${error.message}</p>`;
-            }
+        if (snapshot.empty) {
+          main.innerHTML = "<h2>Health Records</h2><p>No health records found.</p>";
+          return;
         }
 
-        window.loadAdmins = function () {
-            document.getElementById("main").innerHTML = `
-                <h2>Admins</h2>
-                <p>Manage admin accounts...</p>`;
+        let html = "<h2>Health Records</h2><table><tr><th>User ID</th><th>Heart Rate</th><th>Temperature</th><th>Weight</th><th>Height</th><th>Recorded At</th></tr>";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          html += `<tr>
+                      <td>${data.userId || "N/A"}</td>
+                      <td>${isNaN(data.heartRate) ? "N/A" : data.heartRate}</td>
+                      <td>${isNaN(data.temperature) ? "N/A" : data.temperature}</td>
+                      <td>${isNaN(data.weight) ? "N/A" : data.weight}</td>
+                      <td>${isNaN(data.height) ? "N/A" : data.height}</td>
+                      <td>${data.recordedAt?.toDate ? data.recordedAt.toDate().toLocaleString() : "N/A"}</td>
+                   </tr>`;
+        });
+        html += "</table>";
+        main.innerHTML = html;
+      } catch (error) {
+        main.innerHTML = `<h2>Health Records</h2><p>Error: ${error.message}</p>`;
+      }
+    }
+
+    window.loadCritical = function () {
+      document.getElementById("main").innerHTML = "<h2>Critical</h2><p>Critical health alerts...</p>";
+    }
+
+    window.loadComments = async function () {
+      const main = document.getElementById("main");
+      main.innerHTML = "<h2>Comments</h2><p>Loading comments...</p>";
+
+      try {
+        const commentsRef = collection(db, "comments");
+        const snapshot = await getDocs(commentsRef);
+
+        if (snapshot.empty) {
+          main.innerHTML = "<h2>Comments</h2><p>No comments available.</p>";
+          return;
         }
 
-        window.loadRecords = function () {
-            document.getElementById("main").innerHTML = `
-                <h2>Records</h2>
-                <p>Patient records will appear here...</p>`;
-        }
+        let html = "<h2>Comments</h2><table><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          html += `<tr>
+                      <td>${data.user || "Anonymous"}</td>
+                      <td>${data.text || ""}</td>
+                      <td>${data.timestamp?.toDate ? data.timestamp.toDate().toLocaleString() : "N/A"}</td>
+                   </tr>`;
+        });
+        html += "</table>";
+        main.innerHTML = html;
+      } catch (error) {
+        main.innerHTML = `<h2>Comments</h2><p>Error: ${error.message}</p>`;
+      }
+    }
 
-        window.loadCritical = function () {
-            document.getElementById("main").innerHTML = `
-                <h2>Critical</h2>
-                <p>Critical health alerts...</p>`;
-        }
+    window.logout = function () {
+      alert("Logging out...");
+    }
 
-        window.loadComments = async function () {
-            const main = document.getElementById("main");
-            main.innerHTML = "<h2>Comments</h2><p>Loading comments...</p>";
+    window.toggleSidebar = function () {
+      document.getElementById("sidenav").classList.toggle("active");
+    }
 
-            try {
-                const commentsRef = collection(db, "comments");
-                const snapshot = await getDocs(commentsRef);
-
-                if (snapshot.empty) {
-                    main.innerHTML = "<h2>Comments</h2><p>No comments available.</p>";
-                    return;
-                }
-
-                let html = "<h2>Comments</h2><table border='1' cellpadding='10'><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>";
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : "N/A";
-                    html += `<tr>
-                        <td>${data.user || "Anonymous"}</td>
-                        <td>${data.text || ""}</td>
-                        <td>${date}</td>
-                    </tr>`;
-                });
-                html += "</table>";
-                main.innerHTML = html;
-            } catch (error) {
-                main.innerHTML = `<h2>Comments</h2><p>Error loading comments: ${error.message}</p>`;
-            }
-        }
-
-        window.logout = function () {
-            alert("Logging out...");
-        }
-
-        window.toggleSidebar = function () {
-            document.getElementById("sidenav").classList.toggle("active");
-        }
-
-        window.switchSection = function (loadFunction) {
-            document.getElementById("sidenav").classList.remove("active");
-            loadFunction();
-        }
-    </script>
+    window.switchSection = function (loadFunction) {
+      document.getElementById("sidenav").classList.remove("active");
+      loadFunction();
+    }
+  </script>
 </body>
-
 </html>
-
