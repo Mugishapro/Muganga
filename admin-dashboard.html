@@ -17,7 +17,7 @@
         .topnav {
             background-color: #007BFF;
             color: white;
-            padding: 1rem 3rem 1rem 3rem;
+            padding: 1rem 3rem;
             font-size: 1.5rem;
             position: relative;
             text-align: center;
@@ -30,13 +30,13 @@
         .container {
             display: flex;
             flex: 1;
+            min-height: 100vh;
         }
 
         .sidenav {
             background-color: #f4f4f4;
             padding: 0.5rem 1rem;
             width: 200px;
-            min-height: 100vh;
             transition: transform 0.3s ease-in-out;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -58,7 +58,6 @@
         .main {
             flex: 1;
             padding: 1rem;
-            transition: margin-left 0.3s;
         }
 
         .hamburger {
@@ -75,6 +74,10 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
             .sidenav {
                 position: fixed;
                 left: 0;
@@ -82,12 +85,11 @@
                 height: 100%;
                 transform: translateX(-100%);
                 z-index: 1000;
-                width: 200px;
-                padding: 1rem;
             }
 
             .sidenav.active {
                 transform: translateX(0);
+                background-color: #f4f4f4;
             }
 
             .hamburger {
@@ -156,20 +158,20 @@
                     return;
                 }
 
-                let html = <h2>Users</h2><table border='1' cellpadding='10'><tr><th>Name</th><th>Email</th><th>Role</th></tr>;
+                let html = `<h2>Users</h2><table border='1' cellpadding='10'><tr><th>Name</th><th>Email</th><th>Role</th></tr>`;
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    html += <tr>
+                    html += `<tr>
                                 <td>${data.name || "Unknown"}</td>
                                 <td>${data.email || "N/A"}</td>
                                 <td>${data.role || "User"}</td>
-                             </tr>;
+                             </tr>`;
                 });
-                html += </table>;
+                html += `</table>`;
                 main.innerHTML = html;
 
             } catch (error) {
-                main.innerHTML = <h2>Users</h2><p>Error loading users: ${error.message}</p>;
+                main.innerHTML = `<h2>Users</h2><p>Error loading users: ${error.message}</p>`;
             }
         }
 
@@ -198,15 +200,16 @@
                     return;
                 }
 
-                let html = <h2>Comments</h2><table border='1' cellpadding='10'><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>;
+                let html = `<h2>Comments</h2><table border='1' cellpadding='10'><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>`;
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    html += <tr><td>${data.user || "Anonymous"}</td><td>${data.text || ""}</td><td>${data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : "N/A"}</td></tr>;
+                    const time = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : "N/A";
+                    html += `<tr><td>${data.user || "Anonymous"}</td><td>${data.text || ""}</td><td>${time}</td></tr>`;
                 });
-                html += </table>;
+                html += `</table>`;
                 main.innerHTML = html;
             } catch (error) {
-                main.innerHTML = <h2>Comments</h2><p>Error loading comments: ${error.message}</p>;
+                main.innerHTML = `<h2>Comments</h2><p>Error loading comments: ${error.message}</p>`;
             }
         }
 
