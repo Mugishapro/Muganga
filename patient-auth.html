@@ -8,6 +8,8 @@
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; }
     .container { max-width: 400px; margin-top: 50px; }
+    .form-control { font-size: 16px; }
+    .btn { font-size: 18px; padding: 10px; }
   </style>
 </head>
 <body>
@@ -15,19 +17,21 @@
   <div class="container">
     <h2 class="text-center mb-4">Muganga AI - Patient Access</h2>
 
+    <!-- Register Form -->
     <div id="registerDiv">
       <h4>Iyandikishe</h4>
-      <input type="text" id="regName" class="form-control mb-2" placeholder="Amazina">
-      <input type="email" id="regEmail" class="form-control mb-2" placeholder="Imeyili">
-      <input type="password" id="regPassword" class="form-control mb-2" placeholder="Ijambobanga">
+      <input type="text" id="regName" class="form-control mb-2" placeholder="Amazina" autocomplete="name">
+      <input type="email" id="regEmail" class="form-control mb-2" placeholder="Imeyili" autocomplete="email">
+      <input type="password" id="regPassword" class="form-control mb-2" placeholder="Ijambobanga" autocomplete="new-password">
       <button class="btn btn-primary w-100" onclick="register()">Iyandikishe</button>
       <p class="mt-2">Ufite konti? <a href="#" onclick="toggleForm('login')">Injira hano</a></p>
     </div>
 
+    <!-- Login Form -->
     <div id="loginDiv" style="display:none;">
       <h4>Injira</h4>
-      <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Imeyili">
-      <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Ijambobanga">
+      <input type="email" id="loginEmail" class="form-control mb-2" placeholder="Imeyili" autocomplete="email">
+      <input type="password" id="loginPassword" class="form-control mb-2" placeholder="Ijambobanga" autocomplete="current-password">
       <button class="btn btn-success w-100" onclick="login()">Injira</button>
       <p class="mt-2">Nta konti? <a href="#" onclick="toggleForm('register')">Iyandikishe</a></p>
     </div>
@@ -36,7 +40,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
@@ -58,9 +62,14 @@
     }
 
     window.register = async function() {
-      const name = document.getElementById('regName').value;
-      const email = document.getElementById('regEmail').value;
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
+
+      if (!name || !email || !password) {
+        alert("Nyamuneka zuza ibisabwa byose.");
+        return;
+      }
 
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -69,7 +78,7 @@
           name: name,
           email: email,
           role: "patient",
-          createdAt: new Date()
+          createdAt: serverTimestamp()
         });
         alert("Wiyandikishije neza!");
         window.location.href = "patient-dashboard.html";
@@ -79,8 +88,13 @@
     }
 
     window.login = async function() {
-      const email = document.getElementById('loginEmail').value;
+      const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) {
+        alert("Shyiramo email na password.");
+        return;
+      }
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
