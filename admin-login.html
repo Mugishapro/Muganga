@@ -19,11 +19,12 @@
     <button class="btn btn-primary w-100" onclick="adminLogin()">Injira</button>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  <!-- Firebase SDK (Compat version fully compatible with static hosting) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
       authDomain: "muganga-ai.firebaseapp.com",
@@ -34,28 +35,29 @@
       measurementId: "G-JSTCX5WQ31"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    window.adminLogin = async function() {
+    function adminLogin() {
       const email = document.getElementById("adminEmail").value;
       const password = document.getElementById("adminPassword").value;
 
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists() && userDoc.data().role === "admin") {
-          window.location.href = "admin-dashboard.html";
-        } else {
-          alert("Nta burenganzira bwo kwinjira kuri Admin Panel.");
-          await signOut(auth);
-        }
-      } catch (error) {
-        alert(error.message);
-      }
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          db.collection("users").doc(user.uid).get().then((doc) => {
+            if (doc.exists && doc.data().role === "admin") {
+              window.location.href = "admin-dashboard.html";
+            } else {
+              alert("Nta burenganzira bwo kwinjira kuri Admin Panel.");
+              auth.signOut();
+            }
+          });
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
     }
   </script>
 
