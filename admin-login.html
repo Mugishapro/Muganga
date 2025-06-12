@@ -19,7 +19,6 @@
     <button class="btn btn-primary w-100" onclick="adminLogin()">Injira</button>
   </div>
 
-  <!-- Firebase SDK using Modular v9 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -29,7 +28,7 @@
       apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
       authDomain: "muganga-ai.firebaseapp.com",
       projectId: "muganga-ai",
-      storageBucket: "muganga-ai.firebasestorage.app",
+      storageBucket: "muganga-ai.appspot.com",  <!-- ✔ Corrected storageBucket -->
       messagingSenderId: "609789687173",
       appId: "1:609789687173:web:04b6b1eeb20cc70062c0ec",
       measurementId: "G-JSTCX5WQ31"
