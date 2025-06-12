@@ -30,13 +30,13 @@
         .container {
             display: flex;
             flex: 1;
-            min-height: 100vh;
         }
 
         .sidenav {
             background-color: #f4f4f4;
             padding: 0.5rem 1rem;
             width: 200px;
+            min-height: 100vh;
             transition: transform 0.3s ease-in-out;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
@@ -74,10 +74,6 @@
         }
 
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-
             .sidenav {
                 position: fixed;
                 left: 0;
@@ -85,15 +81,21 @@
                 height: 100%;
                 transform: translateX(-100%);
                 z-index: 1000;
+                width: 200px;
+                padding: 1rem;
+                background-color: #f4f4f4;
             }
 
             .sidenav.active {
                 transform: translateX(0);
-                background-color: #f4f4f4;
             }
 
             .hamburger {
                 display: block;
+            }
+
+            .main {
+                padding: 1rem;
             }
         }
     </style>
@@ -122,11 +124,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import {
-            getFirestore,
-            collection,
-            getDocs
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDXFeOehYhT-bU4AVz6EvINJxNRhKibVvI",
@@ -142,7 +140,9 @@
         const db = getFirestore(app);
 
         window.loadOverview = function () {
-            document.getElementById("main").innerHTML = "<h2>Dashboard Overview</h2><p>Summary of statistics here...</p>";
+            document.getElementById("main").innerHTML = `
+                <h2>Dashboard Overview</h2>
+                <p>Summary of statistics here...</p>`;
         }
 
         window.loadUsers = async function () {
@@ -158,16 +158,16 @@
                     return;
                 }
 
-                let html = `<h2>Users</h2><table border='1' cellpadding='10'><tr><th>Name</th><th>Email</th><th>Role</th></tr>`;
+                let html = "<h2>Users</h2><table border='1' cellpadding='10'><tr><th>Name</th><th>Email</th><th>Role</th></tr>";
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     html += `<tr>
-                                <td>${data.name || "Unknown"}</td>
-                                <td>${data.email || "N/A"}</td>
-                                <td>${data.role || "User"}</td>
-                             </tr>`;
+                        <td>${data.name || "Unknown"}</td>
+                        <td>${data.email || "N/A"}</td>
+                        <td>${data.role || "User"}</td>
+                    </tr>`;
                 });
-                html += `</table>`;
+                html += "</table>";
                 main.innerHTML = html;
 
             } catch (error) {
@@ -176,15 +176,21 @@
         }
 
         window.loadAdmins = function () {
-            document.getElementById("main").innerHTML = "<h2>Admins</h2><p>Manage admin accounts...</p>";
+            document.getElementById("main").innerHTML = `
+                <h2>Admins</h2>
+                <p>Manage admin accounts...</p>`;
         }
 
         window.loadRecords = function () {
-            document.getElementById("main").innerHTML = "<h2>Records</h2><p>Patient records will appear here...</p>";
+            document.getElementById("main").innerHTML = `
+                <h2>Records</h2>
+                <p>Patient records will appear here...</p>`;
         }
 
         window.loadCritical = function () {
-            document.getElementById("main").innerHTML = "<h2>Critical</h2><p>Critical health alerts...</p>";
+            document.getElementById("main").innerHTML = `
+                <h2>Critical</h2>
+                <p>Critical health alerts...</p>`;
         }
 
         window.loadComments = async function () {
@@ -200,13 +206,17 @@
                     return;
                 }
 
-                let html = `<h2>Comments</h2><table border='1' cellpadding='10'><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>`;
+                let html = "<h2>Comments</h2><table border='1' cellpadding='10'><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>";
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    const time = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : "N/A";
-                    html += `<tr><td>${data.user || "Anonymous"}</td><td>${data.text || ""}</td><td>${time}</td></tr>`;
+                    const date = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : "N/A";
+                    html += `<tr>
+                        <td>${data.user || "Anonymous"}</td>
+                        <td>${data.text || ""}</td>
+                        <td>${date}</td>
+                    </tr>`;
                 });
-                html += `</table>`;
+                html += "</table>";
                 main.innerHTML = html;
             } catch (error) {
                 main.innerHTML = `<h2>Comments</h2><p>Error loading comments: ${error.message}</p>`;
@@ -229,3 +239,4 @@
 </body>
 
 </html>
+
