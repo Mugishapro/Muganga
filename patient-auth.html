@@ -37,11 +37,13 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  <!-- Firebase JS SDK (Compat version) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
+  <script>
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDg3UPQARAGjWdwF53vJIwYOCA7hOIfG1s",
       authDomain: "muganga-ai.firebaseapp.com",
@@ -52,16 +54,17 @@
       measurementId: "G-JSTCX5WQ31"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    window.toggleForm = function(form) {
+    function toggleForm(form) {
       document.getElementById('registerDiv').style.display = (form === 'register') ? 'block' : 'none';
       document.getElementById('loginDiv').style.display = (form === 'login') ? 'block' : 'none';
     }
 
-    window.register = async function() {
+    async function register() {
       const name = document.getElementById('regName').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
@@ -72,13 +75,13 @@
       }
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
-        await setDoc(doc(db, "users", user.uid), {
+        await db.collection("users").doc(user.uid).set({
           name: name,
           email: email,
           role: "patient",
-          createdAt: serverTimestamp()
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         alert("Wiyandikishije neza!");
         window.location.href = "patient-dashboard.html";
@@ -87,7 +90,7 @@
       }
     }
 
-    window.login = async function() {
+    async function login() {
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
 
@@ -97,7 +100,7 @@
       }
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        await auth.signInWithEmailAndPassword(email, password);
         window.location.href = "patient-dashboard.html";
       } catch (error) {
         alert(error.message);
