@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +12,6 @@
       display: flex;
       flex-direction: column;
     }
-
     .topnav {
       background-color: #007bff;
       color: white;
@@ -22,16 +20,13 @@
       position: relative;
       text-align: center;
     }
-
     .topnav-title {
       margin-left: 2.5rem;
     }
-
     .container {
       display: flex;
       flex: 1;
     }
-
     .sidenav {
       background-color: #f4f4f4;
       padding: 1rem;
@@ -40,7 +35,6 @@
       transition: transform 0.3s ease-in-out;
       box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
-
     .sidenav a {
       display: block;
       margin: 0.2rem 0;
@@ -50,16 +44,13 @@
       border-radius: 5px;
       transition: background 0.3s;
     }
-
     .sidenav a:hover {
       background-color: #ddd;
     }
-
     .main {
       flex: 1;
       padding: 1rem;
     }
-
     .hamburger {
       display: none;
       font-size: 1.5rem;
@@ -72,7 +63,6 @@
       top: 1rem;
       z-index: 1100;
     }
-
     @media (max-width: 768px) {
       .sidenav {
         position: fixed;
@@ -83,27 +73,21 @@
         z-index: 1000;
         width: 200px;
       }
-
       .sidenav.active {
         transform: translateX(0);
       }
-
       .hamburger {
         display: block;
       }
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
     }
-
-    th,
-    td {
+    th, td {
       padding: 10px;
       border: 1px solid #ccc;
     }
-
     button {
       padding: 5px 10px;
       cursor: pointer;
@@ -129,8 +113,7 @@
     </div>
 
     <div class="main" id="main">
-      <h2>Welcome to Muganga AI Admin Panel</h2>
-      <p>Select a menu item to begin.</p>
+      <h2>Loading...</h2>
     </div>
   </div>
 
@@ -141,8 +124,15 @@
       collection,
       getDocs,
       doc,
+      getDoc,
       updateDoc
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDXFeOehYhT-bU4AVz6EvINJxNRhKibVvI",
@@ -156,6 +146,25 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        alert("You must be logged in.");
+        window.location.href = "/login.html";
+        return;
+      }
+
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (!userDoc.exists() || userDoc.data().role !== "admin") {
+        alert("Access denied.");
+        window.location.href = "/";
+        return;
+      }
+
+      // Default view
+      loadOverview();
+    });
 
     window.loadOverview = function () {
       document.getElementById("main").innerHTML = "<h2>Dashboard Overview</h2><p>Summary of statistics here...</p>";
@@ -166,9 +175,7 @@
       main.innerHTML = "<h2>Users</h2><p>Loading users...</p>";
 
       try {
-        const usersRef = collection(db, "users");
-        const snapshot = await getDocs(usersRef);
-
+        const snapshot = await getDocs(collection(db, "users"));
         if (snapshot.empty) {
           main.innerHTML = "<h2>Users</h2><p>No users found.</p>";
           return;
@@ -177,7 +184,7 @@
         let html = "<h2>Users</h2><table><tr><th>Name</th><th>Email</th><th>Role</th></tr>";
         snapshot.forEach(doc => {
           const data = doc.data();
-          html += `<tr><td>${data.name || "Unknown"}</td><td>${data.email || "N/A"}</td><td>${data.role || "User"}</td></tr>`;
+          html += `<tr><td>${data.name || "Unknown"}</td><td>${data.email || "N/A"}</td><td>${data.role || "user"}</td></tr>`;
         });
         html += "</table>";
         main.innerHTML = html;
@@ -192,9 +199,7 @@
       main.innerHTML = "<h2>Admins</h2><p>Loading admin accounts...</p>";
 
       try {
-        const usersRef = collection(db, "users");
-        const snapshot = await getDocs(usersRef);
-
+        const snapshot = await getDocs(collection(db, "users"));
         let html = "<h2>Admins</h2><table><tr><th>Name</th><th>Email</th><th>Actions</th></tr>";
 
         snapshot.forEach(docSnap => {
@@ -220,8 +225,7 @@
       if (!confirm("Are you sure you want to remove admin rights?")) return;
 
       try {
-        const userDoc = doc(db, "users", userId);
-        await updateDoc(userDoc, { role: "user" });
+        await updateDoc(doc(db, "users", userId), { role: "user" });
         alert("Admin rights removed.");
         loadAdmins();
       } catch (error) {
@@ -242,9 +246,7 @@
       main.innerHTML = "<h2>Comments</h2><p>Loading comments...</p>";
 
       try {
-        const commentsRef = collection(db, "comments");
-        const snapshot = await getDocs(commentsRef);
-
+        const snapshot = await getDocs(collection(db, "comments"));
         if (snapshot.empty) {
           main.innerHTML = "<h2>Comments</h2><p>No comments found.</p>";
           return;
@@ -253,8 +255,9 @@
         let html = "<h2>Comments</h2><table><tr><th>User</th><th>Comment</th><th>Timestamp</th></tr>";
         snapshot.forEach(doc => {
           const data = doc.data();
-          const timestamp = data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : "N/A";
-          html += `<tr><td>${data.user || "Anonymous"}</td><td>${data.text || ""}</td><td>${timestamp}</td></tr>`;
+          const ts = data.timestamp ? new Date(data.timestamp.seconds * 1000) : null;
+          const date = ts ? `${ts.toLocaleDateString()} ${ts.toLocaleTimeString()}` : "N/A";
+          html += `<tr><td>${data.user || "Anonymous"}</td><td>${data.text || ""}</td><td>${date}</td></tr>`;
         });
         html += "</table>";
         main.innerHTML = html;
@@ -265,7 +268,14 @@
     };
 
     window.logout = function () {
-      alert("Logging out...");
+      signOut(auth)
+        .then(() => {
+          alert("Logged out.");
+          window.location.href = "/login.html";
+        })
+        .catch(error => {
+          alert("Logout failed: " + error.message);
+        });
     };
 
     window.toggleSidebar = function () {
@@ -278,5 +288,4 @@
     };
   </script>
 </body>
-
 </html>
