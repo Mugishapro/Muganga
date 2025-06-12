@@ -94,7 +94,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="topnav">
     <button class="hamburger" onclick="toggleSidebar()">☰</button>
@@ -111,7 +110,6 @@
       <a href="#" onclick="switchSection(loadComments)">💬 Comments</a>
       <a href="#" onclick="logout()">🚪 Logout</a>
     </div>
-
     <div class="main" id="main">
       <h2>Loading...</h2>
     </div>
@@ -151,18 +149,17 @@
     onAuthStateChanged(auth, async user => {
       if (!user) {
         alert("You must be logged in.");
-        window.location.href = "/login.html";
+        window.location.href = "/admin-login";
         return;
       }
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (!userDoc.exists() || userDoc.data().role !== "admin") {
         alert("Access denied.");
-        window.location.href = "/";
+        window.location.href = "/admin-login";
         return;
       }
 
-      // Default view
       loadOverview();
     });
 
@@ -271,7 +268,7 @@
       signOut(auth)
         .then(() => {
           alert("Logged out.");
-          window.location.href = "/login.html";
+          window.location.href = "/admin-login";
         })
         .catch(error => {
           alert("Logout failed: " + error.message);
