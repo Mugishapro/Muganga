@@ -1,13 +1,16 @@
 {
   "version": 2,
   "name": "muganga-ai",
+  "public": true,
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
-    { "src": "patient-auth.html", "use": "@vercel/static" },
     { "src": "admin-login.html", "use": "@vercel/static" },
+    { "src": "patient-auth.html", "use": "@vercel/static" },
     { "src": "patient-dashboard.html", "use": "@vercel/static" },
     { "src": "admin-dashboard.html", "use": "@vercel/static" },
     { "src": "firebase-config.js", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/index.html" }
   ]
 }
-
