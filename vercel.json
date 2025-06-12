@@ -1,16 +1,19 @@
 {
-  "version": 2,
-  "name": "muganga-ai",
-  "builds": [
-    { "src": "*.html", "use": "@vercel/static" }
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/admin-login", "destination": "/admin-login.html" },
+    { "source": "/admin-dashboard", "destination": "/admin-dashboard.html" },
+    { "source": "/patient-auth", "destination": "/patient-auth.html" },
+    { "source": "/patient-dashboard", "destination": "/patient-dashboard.html" },
+    { "source": "/dashboard.js", "destination": "/dashboard.js" }
   ],
   "routes": [
-    { "src": "/admin-login", "dest": "/admin-login.html" },
-    { "src": "/admin-dashboard", "dest": "/admin-dashboard.html" },
-    { "src": "/patient-auth", "dest": "/patient-auth.html" },
-    { "src": "/patient-dashboard", "dest": "/patient-dashboard.html" },
-    { "src": "/(.*)", "dest": "/$1" },
-    { "handle": "miss" },
-    { "src": "/.*", "status": 404, "dest": "/404.html" }
-  ]
+    {
+      "src": "/(.*)",
+      "dest": "/$1.html"
+    }
+  ],
+  "error": {
+    "404": "/404.html"
+  }
 }
