@@ -5,6 +5,10 @@
     { "src": "index.html", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/admin-login", "dest": "/admin-login.html" },
+    { "src": "/admin-dashboard", "dest": "/admin-dashboard.html" },
+    { "src": "/patient-auth", "dest": "/patient-auth.html" },
+    { "src": "/patient-dashboard", "dest": "/patient-dashboard.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
