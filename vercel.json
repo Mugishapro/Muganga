@@ -4,14 +4,7 @@
     { "source": "/admin-login", "destination": "/admin-login.html" },
     { "source": "/admin-dashboard", "destination": "/admin-dashboard.html" },
     { "source": "/patient-auth", "destination": "/patient-auth.html" },
-    { "source": "/patient-dashboard", "destination": "/patient-dashboard.html" },
-    { "source": "/dashboard.js", "destination": "/dashboard.js" }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1.html"
-    }
+    { "source": "/patient-dashboard", "destination": "/patient-dashboard.html" }
   ],
   "error": {
     "404": "/404.html"
